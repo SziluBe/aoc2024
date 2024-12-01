@@ -1,0 +1,14 @@
+# Advent of Code 2024
+
+This repository contains solutions for the Advent of Code 2024 challenges. The solutions are implemented mostly in Haskell, with Python scripts to help with IO.
+
+## Structure
+
+The repository is organized using subfolders for each day:
+
+- `day01/`
+- `day02/`
+- `day03/`
+- ...
+
+Each subfolder contains the Haskell and Python source for that day's solutions, as well as my input files for that day's challenge.
