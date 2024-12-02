@@ -1,6 +1,6 @@
 # read file 'input' and split each row
 def read_input():
-    with open('input', 'r') as f:
+    with open('day01/input', 'r') as f:
         return f.read().splitlines()
 
 lines = read_input()
