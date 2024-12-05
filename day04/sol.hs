@@ -28,9 +28,29 @@ res_q1 = countWord inputGrid "XMAS"
 test :: [String]
 test = ["MMMSXXMASM", "MSAMXMSMSA", "AMXSXMAAMM", "MSAMASMSMX", "XMASAMXAMM", "XXAMMXXAMA", "SMSMSASXSS", "SAXAMASAAA", "MAMMMXMMMM", "MXMXAXMASX"]
 
-resTest :: Int
-resTest = countWord test "XMAS"
+res_test1 :: Int
+res_test1 = countWord test "XMAS"
 
 -- Part 2
 
+ms :: String
+ms = "MS"
 
+isXofMASs :: [String] -> (Int, Int) -> Bool
+isXofMASs grid (x, y)
+    | all validPos [(x + dx, y + dy) | dx <- [-1, 1], dy <- [-1, 1], dx /= 0 || dy /= 0] =
+        ([grid !! (x - 1) !! (y - 1), grid !! (x + 1) !! (y + 1)] == ms || [grid !! (x - 1) !! (y - 1), grid !! (x + 1) !! (y + 1)] == reverse ms) &&
+        ([grid !! (x - 1) !! (y + 1), grid !! (x + 1) !! (y - 1)] == ms || [grid !! (x - 1) !! (y + 1), grid !! (x + 1) !! (y - 1)] == reverse ms) &&
+        grid !! x !! y == 'A'
+    | otherwise = False
+    where
+        validPos (x, y) = x >= 0 && x < length grid && y >= 0 && y < length (head grid)
+
+countXofMASs :: [String] -> Int
+countXofMASs grid = sum [1 | a <- [0 .. (length grid - 1)], b <- [0 .. length (head grid) - 1], isXofMASs grid (a, b)]
+
+res_q2 :: Int
+res_q2 = countXofMASs inputGrid
+
+res_test2 :: Int
+res_test2 = countXofMASs test
