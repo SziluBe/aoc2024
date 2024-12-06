@@ -4,6 +4,8 @@ import qualified Data.IntMap.Lazy as M
 import qualified Data.Map as Map
 import Data.Set ( Set )
 import qualified Data.Set as Set
+import Data.Ord (Ordering)
+import Data.List (sortBy)
 
 
 rules :: [(Int, Int)]
@@ -43,11 +45,20 @@ res_q1 = sum $ map middle updates'
 
 -- Part 2
 
-recUpdates' :: Map Int (Set Int) -> Set Int -> Map Int Int -> Int -> [Int] -> [Int] -> Bool
--- recUpdates' rules seen xtoidx i updatesL updatesR
-recUpdates' _ _ _ _ _ [] = True
-recUpdates' rs s xtoi i (l:ls) (x:xs) = case Map.lookup x rs of
-    Nothing -> recUpdates' rs seen xtoi i ls xs
-    Just ys -> Set.null (ys `Set.intersection` s) && recUpdates' rs seen xtoi i ls xs
+lt :: Int -> Int -> Ordering
+lt x y = case Map.lookup x rules' of
+    Nothing -> LT
+    Just ys -> if y `Set.member` ys then LT else GT
+
+recUpdates' :: [Int] -> [Int]
+recUpdates' xs = case sortBy lt xs of
+    [] -> []
+    (x:xs) -> x : recUpdates' xs
+
+updates'' :: [[Int]]
+updates'' = map recUpdates' $ filter (not . recUpdates rules' Set.empty) updates
+
+res_q2 :: Int -- Sum of middle elements
+res_q2 = sum $ map middle updates''
     where
-        seen = Set.insert l s
+        middle xs = xs !! (length xs `div` 2)
